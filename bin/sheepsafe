@@ -2,4 +2,8 @@
 
 require 'sheepsafe'
 
-Sheepsafe::Controller.new.run
+if ARGV.length == 1 && ARGV.first == "install"
+  Sheepsafe::Installer.new.run
+else
+  Sheepsafe::Controller.new.run
+end

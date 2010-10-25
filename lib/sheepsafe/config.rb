@@ -3,6 +3,7 @@ require 'yaml'
 module Sheepsafe
   class Config
     FILE = File.expand_path('~/.sheepsafe.yml')
+    DEFAULT_CONFIG = {"untrusted_location" => "Untrusted", "socks_port" => "9999"}
     ATTRS = %w(trusted_location untrusted_location last_location ssh_host socks_port)
     ARRAY_ATTRS = %w(trusted_ssids trusted_bssids)
 
@@ -15,7 +16,7 @@ module Sheepsafe
     attr_reader :config
 
     def initialize(hash = nil)
-      @config = hash || self.class.load_config
+      @config = DEFAULT_CONFIG.merge(hash || self.class.load_config)
     end
 
     ATTRS.each do |m|

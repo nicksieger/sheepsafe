@@ -16,6 +16,19 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
+  s.default_executable = "sheepsafe"
+
+  s.post_install_message = %[
+===========================================================================
+Welcome to Sheepsafe!
+
+=8P <=== (That\'s a sheep emoji.)
+
+If this is your first time using Sheepsafe, you probably want to set it up.
+
+To do that, run \`sheepsafe install\' now.
+===========================================================================
+  ]
 
   # = MANIFEST =
   s.files = %w[
