@@ -19,7 +19,18 @@ Gem::Specification.new do |s|
 
   # = MANIFEST =
   s.files = %w[
-
+    History.txt
+    LICENSE
+    README.md
+    Rakefile
+    bin/sheepsafe
+    lib/sheepsafe.rb
+    lib/sheepsafe/config.rb
+    lib/sheepsafe/controller.rb
+    lib/sheepsafe/network.rb
+    lib/sheepsafe/status.rb
+    sheepsafe.gemspec
+    spec/sheepsafe_spec.rb
   ]
   # = MANIFEST =
 
