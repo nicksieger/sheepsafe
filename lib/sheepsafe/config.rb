@@ -5,10 +5,10 @@ module Sheepsafe
     FILE = File.expand_path('~/.sheepsafe.yml')
     DEFAULT_CONFIG = {"untrusted_location" => "Untrusted", "socks_port" => "9999"}
     ATTRS = %w(trusted_location untrusted_location last_location ssh_host socks_port)
-    ARRAY_ATTRS = %w(trusted_ssids trusted_bssids)
+    ARRAY_ATTRS = %w(trusted_names)
 
     def self.load_config
-      YAML.load(FILE)
+      File.open(FILE) {|f| YAML.load(f) }
     rescue
       raise "Unable to read ~/sheepsafe.yml; please run sheepsafe-install"
     end

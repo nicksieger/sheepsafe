@@ -6,8 +6,8 @@ module Sheepsafe
     end
 
     def trusted?
-      @config.trusted_ssids.include?(current_ssid) ||
-        @config.trusted_bssids.include?(current_bssid)
+      @config.trusted_names.include?(current_ssid) ||
+        @config.trusted_names.include?(current_bssid)
     end
 
     def current_ssid

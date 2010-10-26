@@ -100,14 +100,14 @@ describe Sheepsafe::Network do
   let(:current_network) { Sheepsafe::Network.new }
 
   context "with trusted SSID" do
-    let(:config) { Sheepsafe::Config.new({"trusted_ssids" => [current_network.current_ssid]}) }
+    let(:config) { Sheepsafe::Config.new({"trusted_names" => [current_network.current_ssid]}) }
     subject { Sheepsafe::Network.new(config) }
 
     it { should be_trusted }
   end
 
   context "with trusted BSSID" do
-    let(:config) { Sheepsafe::Config.new({"trusted_bssids" => [current_network.current_bssid]}) }
+    let(:config) { Sheepsafe::Config.new({"trusted_names" => [current_network.current_bssid]}) }
     subject { Sheepsafe::Network.new(config) }
 
     it { should be_trusted }
