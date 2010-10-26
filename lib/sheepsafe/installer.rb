@@ -106,10 +106,11 @@ PLIST
     # Register the task with launchd.
     def register_launchd_task
       say "Registering #{PLIST_FILE}"
-      system "launchctl load #{PLIST_FILE}"
+      system "launchctl load #{File.dirname(PLIST_FILE)}"
     end
 
     def announce_done
+      controller.run   # Choose the right network and get things going
       say("Sheepsafe installation done!")
     end
 
