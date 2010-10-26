@@ -65,13 +65,21 @@ module Sheepsafe
     end
 
     def notify_ok(msg)
+      check_growl_installed
       Growl.notify_ok(msg)
       log(msg)
     end
 
     def notify_warning(msg)
+      check_growl_installed
       Growl.notify_warning(msg)
       log(msg)
+    end
+
+    def check_growl_installed
+      unless Growl.installed?
+        log("WARNING: Growl not installed (probably couldn't find growlnotify in PATH: #{ENV['PATH']})")
+      end
     end
 
     def log(msg)

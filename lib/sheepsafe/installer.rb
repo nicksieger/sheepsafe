@@ -97,6 +97,12 @@ MSG
 	<array>
 		<string>/Library/Preferences/SystemConfiguration</string>
 	</array>
+        <!-- We specify PATH here because /usr/local/bin, where grownotify -->
+        <!-- is usually installed, is not in the script path by default. -->
+        <key>EnvironmentVariables</key>
+        <dict>
+                <key>PATH</key><string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/bin</string>
+        </dict>
 </dict>
 </plist>
 PLIST
