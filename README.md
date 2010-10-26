@@ -48,9 +48,9 @@ an "Untrusted" location for Sheepsafe to configure and use when you're
 on an untrusted network. Sheepsafe will prompt you to do these steps
 during installation.
 
-![http://github.com/nicksieger/sheepsafe/raw/master/doc/edit-locations.jpg](Edit locations...)
+![Edit locations...](http://github.com/nicksieger/sheepsafe/raw/master/doc/edit-locations.jpg)
 
-![http://github.com/nicksieger/sheepsafe/raw/master/doc/add-untrusted-apply.jpg](Add Untrusted and Apply...)
+![Add Untrusted and Apply...](http://github.com/nicksieger/sheepsafe/raw/master/doc/add-untrusted-apply.jpg)
 
 ## Growl
 
