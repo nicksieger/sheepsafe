@@ -12,5 +12,7 @@ if ARGV.length == 1 && ARGV.first =~ /^(un)?install$/
   installer = Sheepsafe::Installer.new
   ARGV.first == 'install' ? installer.run : installer.uninstall
 else
+  # Allow network changes to sink in for a couple more seconds
+  sleep 2
   Sheepsafe::Controller.new.run
 end
