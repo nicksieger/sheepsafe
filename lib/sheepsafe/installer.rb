@@ -19,7 +19,7 @@ module Sheepsafe
       setup_untrusted_location
       write_config
       write_launchd_plist
-      # register_launchd_task
+      register_launchd_task
       announce_done
     end
 
@@ -106,7 +106,7 @@ PLIST
     # Register the task with launchd.
     def register_launchd_task
       say "Registering #{PLIST_FILE}"
-      system "launchctl load #{File.dirname(PLIST_FILE)}"
+      system "launchctl load #{PLIST_FILE}"
     end
 
     def announce_done
