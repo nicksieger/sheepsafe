@@ -75,6 +75,12 @@ settings for making connections, where applicable.
 - Run `sheepsafe uninstall` to unregister the Launchd task and remove
   Sheepsafe vestiges from your system.
 
+## Give back
+
+I'll gladly accept [pull requests][pr] and [bug reports][issues].
+
 [FireSheep]: http://codebutler.com/firesheep
 [RVM]: http://rvm.beginrescueend.com/
 [polo]: http://www.symonds.id.au/marcopolo/
+[pr]: http://github.com/nicksieger/sheepsafe/pulls
+[issues]: http://github.com/nicksieger/sheepsafe/issues
