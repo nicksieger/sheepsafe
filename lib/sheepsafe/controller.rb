@@ -10,27 +10,35 @@ module Sheepsafe
       @config = config || Sheepsafe::Config.new
       @status = status || Sheepsafe::Status.new(@config)
       @logger = logger || begin
-                            STDOUT.reopen(File.open(LOG_FILE, 'w+'))
+                            STDOUT.reopen(File.open(LOG_FILE, (File::WRONLY | File::APPEND)))
                             Logger.new(STDOUT)
                           end
     end
 
     def run
       log("Sheepsafe starting")
-      if network_changed?
-        if switch_to_trusted?
-          notify_ok "Switching to #{@config.trusted_location} location"
-          system "scselect #{@config.trusted_location}"
-          bring_socks_proxy 'down'
-        elsif switch_to_untrusted?
-          notify_warning "Switching to #{@config.untrusted_location} location"
-          bring_socks_proxy 'up'
-          system "scselect #{@config.untrusted_location}"
+      if network_up?
+        if network_changed?
+          if switch_to_trusted?
+            notify_ok "Switching to #{@config.trusted_location} location"
+            system "scselect #{@config.trusted_location}"
+            bring_socks_proxy 'down'
+          elsif switch_to_untrusted?
+            notify_warning "Switching to #{@config.untrusted_location} location"
+            bring_socks_proxy 'up'
+            system "scselect #{@config.untrusted_location}"
+          end
+          @config.last_network = @status.current_network
+          @config.write
         end
-        @config.last_network = @status.current_network
-        @config.write
+      else
+        log("AirPort is off")
       end
       log("Sheepsafe finished")
+    end
+
+    def network_up?
+      @status.network_up?
     end
 
     def network_changed?

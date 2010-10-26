@@ -10,6 +10,10 @@ module Sheepsafe
         @config.trusted_names.include?(current_bssid)
     end
 
+    def up?
+      @data['AirPort'] != false
+    end
+
     def current_ssid
       @data['SSID']
     end
