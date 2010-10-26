@@ -8,7 +8,7 @@ describe Sheepsafe::Controller do
   end
 
   let (:status) do
-    mock("status", :current_network => "current_network")
+    mock("status", :current_network => "current_network", :network_up? => true)
   end
 
   let(:controller) do
@@ -48,6 +48,14 @@ describe Sheepsafe::Controller do
     end
 
     it "does nothing" do
+      config.should_not_receive(:write)
+      controller.run
+    end
+  end
+
+  context "network is down" do
+    it "does nothing" do
+      status.should_receive(:network_up?).and_return false
       config.should_not_receive(:write)
       controller.run
     end
