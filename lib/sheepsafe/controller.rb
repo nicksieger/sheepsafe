@@ -34,7 +34,7 @@ module Sheepsafe
     end
 
     def bring_socks_proxy(direction)
-      Daemons.run_proc 'sheepsafe-socks-proxy.rb', :ARGV => [direction == 'up' ? 'start' : 'stop'], :dir_mode => :system do
+      Daemons.run_proc '.sheepsafe.proxy', :ARGV => [direction == 'up' ? 'start' : 'stop'], :dir_mode => :normal, :dir => ENV['HOME'] do
         exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
       end
     end

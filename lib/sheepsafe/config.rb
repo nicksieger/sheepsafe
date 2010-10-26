@@ -4,7 +4,7 @@ module Sheepsafe
   class Config
     FILE = File.expand_path('~/.sheepsafe.yml')
     DEFAULT_CONFIG = {"untrusted_location" => "Untrusted", "socks_port" => "9999"}
-    ATTRS = %w(trusted_location untrusted_location last_location ssh_host socks_port)
+    ATTRS = %w(trusted_location untrusted_location last_network ssh_host socks_port)
     ARRAY_ATTRS = %w(trusted_names)
 
     def self.load_config

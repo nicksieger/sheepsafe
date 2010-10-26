@@ -26,6 +26,6 @@ down the SOCKS proxy.
 
 ## Install
 
-
+* After installing the gem, run `sheepsafe install` and follow the prompts.
 
 [FireSheep]: http://codebutler.com/firesheep

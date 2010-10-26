@@ -65,7 +65,7 @@ MSG
     end
 
     def setup_untrusted_location
-      if agree "Next, I'll set up the SOCKS proxy in the \"Untrusted\" location for you. OK\?"
+      if agree "Next, I'll set up the SOCKS proxy in the \"Untrusted\" location for you. OK\? (yes/no)\n"
         system "networksetup -setsocksfirewallproxy AirPort localhost #{config.socks_port}"
       end
     end
