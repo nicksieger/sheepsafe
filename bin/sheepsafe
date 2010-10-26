@@ -1,6 +1,12 @@
 #!/usr/bin/env ruby
 
-require 'sheepsafe'
+require 'rubygems'
+begin
+  require 'sheepsafe'
+rescue LoadError
+  $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+  require 'sheepsafe'
+end
 
 if ARGV.length == 1 && ARGV.first =~ /^(un)?install$/
   installer = Sheepsafe::Installer.new
