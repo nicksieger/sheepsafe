@@ -40,6 +40,7 @@ To do that, run \`sheepsafe install\' now.
     lib/sheepsafe.rb
     lib/sheepsafe/config.rb
     lib/sheepsafe/controller.rb
+    lib/sheepsafe/installer.rb
     lib/sheepsafe/network.rb
     lib/sheepsafe/status.rb
     sheepsafe.gemspec
