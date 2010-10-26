@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
+  s.executables = ["sheepsafe"]
   s.default_executable = "sheepsafe"
 
   s.post_install_message = %[
