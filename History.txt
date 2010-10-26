@@ -1,6 +1,4 @@
-=== 1.0.0 / 2010-10-25
+=== 0.1.0
 
-* 1 major enhancement
-
-  * Birthday!
+- Initial release.
 

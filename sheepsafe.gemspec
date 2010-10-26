@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name              = 'sheepsafe'
-  s.version           = '0.1'
-  s.date              = '2010-10-25'
+  s.version           = '0.1.0'
+  s.date              = '2010-10-26'
 
   s.rubyforge_project = %q{caldersphere}
 
@@ -38,6 +38,8 @@ To do that, run \`sheepsafe install\' now.
     README.md
     Rakefile
     bin/sheepsafe
+    doc/add-untrusted-apply.jpg
+    doc/edit-locations.jpg
     lib/sheepsafe.rb
     lib/sheepsafe/config.rb
     lib/sheepsafe/controller.rb

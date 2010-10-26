@@ -1,4 +1,5 @@
 require 'date'
+require 'rake/clean'
 
 #############################################################################
 #
@@ -72,6 +73,7 @@ task :build => :gemspec do
   sh "gem build #{gemspec_file}"
   sh "mv #{gem_file} pkg"
 end
+CLEAN << 'pkg'
 
 task :gemspec do
   # read spec file and split out manifest section

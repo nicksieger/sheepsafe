@@ -3,7 +3,7 @@ Sheepsafe
 
 http://github.com/nicksieger/sheepsafe
 
-## Description:
+## Description
 
 Sheepsafe is a small utility to keep you safe from [FireSheep][]! 
 
