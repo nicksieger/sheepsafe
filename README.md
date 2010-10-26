@@ -5,7 +5,14 @@ http://github.com/nicksieger/sheepsafe
 
 ## Description
 
-Sheepsafe is a small utility to keep you safe from [FireSheep][]! 
+Sheepsafe is a small utility to keep you safe from [FireSheep][]!
+It's a tool for mobile geeks.
+
+We all know the cookie-stealing issue has been out there for a while,
+but now with [FireSheep][], it just got way too easy. If you're like
+me, I don't want to get exposed at the next gathering of techies at a
+conference or even at a local coffee shop with this thing out there.
+So I built Sheepsafe for myself.
 
 Sheepsafe was built to automate the task of switching your network
 configuration to use a SOCKS proxy whenever you join an untrusted
