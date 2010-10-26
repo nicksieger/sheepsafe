@@ -2,8 +2,9 @@
 
 require 'sheepsafe'
 
-if ARGV.length == 1 && ARGV.first == "install"
-  Sheepsafe::Installer.new.run
+if ARGV.length == 1 && ARGV.first =~ /^(un)?install$/
+  installer = Sheepsafe::Installer.new
+  ARGV.first == 'install' ? installer.run : installer.uninstall
 else
   Sheepsafe::Controller.new.run
 end

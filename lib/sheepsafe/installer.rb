@@ -112,6 +112,13 @@ PLIST
       say("Sheepsafe installation done!")
     end
 
+    def uninstall
+      say "Uninstalling Sheepsafe from launchd..."
+      system "launchctl unload #{PLIST_FILE}"
+      File.unlink PLIST_FILE
+      say "Uninstall finished."
+    end
+
     private
     def update_config_with_status
       unless config.trusted_location
