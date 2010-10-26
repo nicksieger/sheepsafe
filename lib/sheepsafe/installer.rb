@@ -2,12 +2,13 @@ module Sheepsafe
   class Installer
     PLIST_FILE = File.expand_path("~/Library/LaunchAgents/sheepsafe.plist")
 
-    attr_reader :config, :status
+    attr_reader :config, :status, :controller
 
     def initialize
       require 'highline/import'
       @config = File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({})
       @status = Sheepsafe::Status.new(@config)
+      @controller = Sheepsafe::Controller.new @config, @status, Logger.new(Sheepsafe::Controller::LOG_FILE)
       update_config_with_status
     end
 
@@ -113,9 +114,16 @@ PLIST
     end
 
     def uninstall
-      say "Uninstalling Sheepsafe from launchd..."
-      system "launchctl unload #{PLIST_FILE}"
-      File.unlink PLIST_FILE
+      if controller.proxy_running?
+        say "Shutting down SOCKS proxy..."
+        controller.bring_socks_proxy 'down'
+      end
+      if File.exist?(PLIST_FILE)
+        say "Uninstalling Sheepsafe from launchd..."
+        system "launchctl unload #{PLIST_FILE}"
+        File.unlink PLIST_FILE rescue nil
+      end
+      Dir['~/.sheepsafe.*'].each {|f| File.unlink f rescue nil}
       say "Uninstall finished."
     end
 

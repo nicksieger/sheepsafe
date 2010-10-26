@@ -3,22 +3,20 @@ require 'sheepsafe'
 
 describe Sheepsafe::Controller do
   let(:config) do
-    mock("config").tap do |c|
-      c.stub!(:trusted_location).and_return "trusted_location"
-      c.stub!(:untrusted_location).and_return "untrusted_location"
-      c.stub!(:last_network=)
-      c.stub!(:write)
-    end
+    mock("config", :trusted_location => "trusted_location", :untrusted_location => "untrusted_location",
+         :last_network= => nil, :write => nil)
   end
 
   let (:status) do
-    mock("status").tap do |s|
-      s.stub!(:current_network).and_return "current_network"
-    end
+    mock("status", :current_network => "current_network")
   end
 
   let(:controller) do
-    Sheepsafe::Controller.new(config, status)
+    # Stub out logging
+    Sheepsafe::Controller.new(config, status, mock("logger", :info => nil)).tap do |c|
+      c.stub!(:notify_ok)
+      c.stub!(:notify_warning)
+    end
   end
 
   context "#network_changed?" do

@@ -51,6 +51,7 @@ To do that, run \`sheepsafe install\' now.
 
   s.test_files = s.files.select { |path| path =~ /^spec\/.*spec.*\.rb/ }
 
+  s.add_dependency(%q<growl>, ["~> 1.0"])
   s.add_dependency(%q<highline>, ["~> 1.6"])
   s.add_dependency(%q<daemons>, ["~> 1.1"])
   s.add_development_dependency(%q<rspec>, ["~> 2.0"])
