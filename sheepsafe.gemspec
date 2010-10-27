@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name              = 'sheepsafe'
-  s.version           = '0.1.0'
-  s.date              = '2010-10-26'
+  s.version           = '0.2.0'
+  s.date              = '2010-10-27'
 
   s.rubyforge_project = %q{caldersphere}
 
@@ -46,7 +46,6 @@ current configuration, run \`sheepsafe update\'.
     lib/sheepsafe/controller.rb
     lib/sheepsafe/installer.rb
     lib/sheepsafe/network.rb
-    lib/sheepsafe/status.rb
     sheepsafe.gemspec
     spec/sheepsafe_spec.rb
   ]
