@@ -38,8 +38,6 @@ To do that, run \`sheepsafe install\' now.
     README.md
     Rakefile
     bin/sheepsafe
-    doc/add-untrusted-apply.jpg
-    doc/edit-locations.jpg
     lib/sheepsafe.rb
     lib/sheepsafe/config.rb
     lib/sheepsafe/controller.rb

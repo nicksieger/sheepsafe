@@ -48,19 +48,6 @@ but this setup Works For Me.
 - After installing the gem, run `sheepsafe install` and follow the
   prompts for configuring Sheepsafe.
 
-### Setting up the "Untrusted" location
-
-One manual step that you need to do during installation is to create
-an "Untrusted" location for Sheepsafe to configure and use when you're
-on an untrusted network. Sheepsafe will prompt you to do these steps
-during installation.
-
-*(Aside: If anyone cares to look into automating this bit, that would be sweet! I got as far as looking into `/usr/sbin/networksetup` but gave up for now.*)
-
-![Edit locations...](http://github.com/nicksieger/sheepsafe/raw/master/doc/edit-locations.jpg)
-
-![Add Untrusted and Apply...](http://github.com/nicksieger/sheepsafe/raw/master/doc/add-untrusted-apply.jpg)
-
 ## Growl
 
 If you wish to receive Growl notifications when Sheepsafe is switching
