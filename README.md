@@ -41,8 +41,9 @@ but this setup Works For Me.
 
 ## Install
 
-- First install the gem: `sudo gem install sheepsafe`. It's
-  recommended to install using the system Ruby to minimize
+- First install the gem:
+      sudo gem install sheepsafe
+  It's recommended to install using the system Ruby to minimize
   difficulties informing launchd about an [RVM][] or some other
   package manager.
 - After installing the gem, run `sheepsafe install` and follow the
@@ -52,7 +53,9 @@ but this setup Works For Me.
 
 If you wish to receive Growl notifications when Sheepsafe is switching
 your location, be sure to install the `growlnotify` utility from the
-"Extras" folder in the Growl .dmg.
+"Extras" folder in the Growl .dmg. Then install the `growl` gem:
+
+      sudo gem install growl
 
 ## Post-install
 
