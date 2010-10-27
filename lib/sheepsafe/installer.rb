@@ -53,10 +53,9 @@ MSG
         q.default = config.trusted_location
       end
 
-      config.trusted_names = ask "Next, one or more network names (blank line to stop, RET for #{@names.inspect}) >\n" do |q|
-        q.gather = ""
-      end
-      config.trusted_names = @names if config.trusted_names.empty?
+      config.trusted_names = ask "Next, one or more trusted network names or SSIDs (comma-separated) >\n" do |q|
+        q.default = @names.join(',')
+      end.split(",").map(&:strip)
     end
 
     def manual_network_location_prompt
