@@ -1,6 +1,9 @@
 require 'daemons'
 require 'logger'
-require 'growl'
+begin
+  require 'growl'
+rescue LoadError
+end
 
 module Sheepsafe
   class Controller
@@ -65,21 +68,17 @@ module Sheepsafe
     end
 
     def notify_ok(msg)
-      check_growl_installed
-      Growl.notify_ok(msg)
+      when_growl_available { Growl.notify_ok(msg) }
       log(msg)
     end
 
     def notify_warning(msg)
-      check_growl_installed
-      Growl.notify_warning(msg)
+      when_growl_available { Growl.notify_warning(msg) }
       log(msg)
     end
 
-    def check_growl_installed
-      unless Growl.installed?
-        log("WARNING: Growl not installed (probably couldn't find growlnotify in PATH: #{ENV['PATH']})")
-      end
+    def when_growl_available(&block)
+      block.call if defined?(Growl)
     end
 
     def log(msg)
