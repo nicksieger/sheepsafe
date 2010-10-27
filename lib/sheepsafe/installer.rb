@@ -2,13 +2,13 @@ module Sheepsafe
   class Installer
     PLIST_FILE = File.expand_path("~/Library/LaunchAgents/sheepsafe.plist")
 
-    attr_reader :config, :status, :controller
+    attr_reader :config, :network, :controller
 
-    def initialize
+    def initialize(config = nil, network = nil, controller = nil)
       require 'highline/import'
-      @config = File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({})
-      @network = Sheepsafe::Network.new(@config)
-      @controller = Sheepsafe::Controller.new @config, @network, Logger.new(Sheepsafe::Controller::LOG_FILE)
+      @config  = config  || (File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({}))
+      @network = network || Sheepsafe::Network.new(@config)
+      @controller = controller || Sheepsafe::Controller.new(@config, @network, Logger.new(Sheepsafe::Controller::LOG_FILE))
       update_config_with_network
     end
 
@@ -52,18 +52,19 @@ MSG
         q.default = config.trusted_location
       end
 
-      config.trusted_names = ask "Next, one or more trusted network names or SSIDs (comma-separated) >\n" do |q|
+      config.trusted_names = ask "Next, one or more trusted network names/SSIDs (comma-separated) >\n" do |q|
         q.default = @names.join(',')
       end.split(",").map(&:strip)
     end
 
     def setup_network_location
-      if agree "Next, I'll create and switch to the \"Untrusted\" location in Network Preferences. OK\? (yes/no)\n"
-        system "networksetup -createlocation Untrusted populate" unless `networksetup -listlocations` =~ /Untrusted/m
-        system "networksetup -switchtolocation Untrusted"
+      if `networksetup -listlocations` !~ /Untrusted/m &&
+          agree("Next, I'll create and switch to the \"Untrusted\" location in Network Preferences. OK\? (yes/no)\n")
+        system "networksetup -createlocation Untrusted populate"
       end
 
       if agree "Next, I'll set up the SOCKS proxy in the \"Untrusted\" location for you. OK\? (yes/no)\n"
+        system "networksetup -switchtolocation Untrusted"
         system "networksetup -setsocksfirewallproxy AirPort localhost #{config.socks_port}"
       end
     end

@@ -3,46 +3,46 @@ require 'sheepsafe'
 
 describe Sheepsafe::Controller do
   let(:config) do
-    mock("config", :trusted_location => "trusted_location", :untrusted_location => "untrusted_location",
+    double("config", :trusted_location => "trusted_location", :untrusted_location => "untrusted_location",
          :last_network= => nil, :write => nil)
   end
 
   let (:network) do
-    mock("network", :up? => true, :ssid => "current", :bssid => "current_bssid")
+    double("network", :up? => true, :ssid => "current", :bssid => "current_bssid")
   end
 
   let(:controller) do
     # Stub out logging
-    Sheepsafe::Controller.new(config, network, mock("logger", :info => nil)).tap do |c|
-      c.stub!(:notify_ok)
-      c.stub!(:notify_warning)
+    Sheepsafe::Controller.new(config, network, double("logger", :info => nil)).tap do |c|
+      c.stub(:notify_ok)
+      c.stub(:notify_warning)
     end
   end
 
   context "#network_changed?" do
     it "is when the current_network is different than the last_network" do
-      config.should_receive(:last_network).and_return mock("network", :ssid => "last", :bssid => nil)
+      config.should_receive(:last_network).and_return double("network", :ssid => "last", :bssid => nil)
       controller.network_changed?.should be_true
     end
   end
 
   context "#switch_to_trusted?" do
     it "is when the current network is trusted" do
-      network.stub!(:trusted?).and_return true
+      network.stub :trusted? => true
       controller.switch_to_trusted?.should be_true
     end
   end
 
   context "#switch_to_untrusted?" do
     it "is when the current network is trusted" do
-      network.stub!(:trusted?).and_return false
+      network.stub :trusted? => false
       controller.switch_to_untrusted?.should be_true
     end
   end
 
   context "network didn't change" do
     before :each do
-      config.stub!(:last_network).and_return network
+      config.stub :last_network => network
     end
 
     it "does nothing" do
@@ -61,9 +61,8 @@ describe Sheepsafe::Controller do
 
   context "network changed" do
     before :each do
-      controller.stub!(:network_changed?).and_return true
-      controller.stub!(:switch_to_trusted?).and_return false
-      controller.stub!(:switch_to_untrusted?).and_return false
+      controller.stub(:network_changed? => true, :switch_to_trusted? => false,
+                      :switch_to_untrusted? => false)
     end
 
     it "writes the last network to the configuration" do
@@ -117,22 +116,41 @@ describe Sheepsafe::Network do
 end
 
 describe Sheepsafe::Installer do
-  let(:config) do
-    mock("config", :trusted_location => "trusted_location", :untrusted_location => "untrusted_location",
-         :last_network= => nil, :write => nil)
+  let(:config) { double("config").as_null_object }
+  let(:network) { double("network", :up? => true, :ssid => "current", :bssid => "current_bssid") }
+  let(:controller) { double "controller" }
+  let (:installer) do
+    @messages = []
+    @commands = []
+    Sheepsafe::Installer.new(config, network, controller).tap do |ins|
+      ins.stub(:say).and_return do |msg|
+        @messages << msg
+      end
+      ins.stub(:ask).and_return do |msg,*rest|
+        @messages << msg
+        ""
+      end
+      ins.stub(:agree).and_return do |msg|
+        @messages << msg
+        true
+      end
+      ins.stub(:system).and_return do |cmd|
+        @commands << cmd
+        nil
+      end
+    end
   end
-
-  let(:controller) { mock "controller" }
-
-  let (:installer) { Sheepsafe::Installer.new }
 
   before :each do
-    @prev_stdin, @prev_stderr = $stdin, $stderr
+    $?.stub :success? => true
   end
 
-  after :each do
-    $stdin, $stderr = @prev_stdin, @prev_stderr
+  it "asks questions, runs commands, writes the config to disk and runs the controller" do
+    config.should_receive(:write)
+    controller.should_receive(:run)
+    installer.should_receive(:write_launchd_plist) # don't want to actually touch plist file
+    installer.run
+    @messages.should_not be_empty
+    @commands.should_not be_empty
   end
-
-
 end
