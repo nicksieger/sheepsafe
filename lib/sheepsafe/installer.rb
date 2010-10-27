@@ -7,9 +7,9 @@ module Sheepsafe
     def initialize
       require 'highline/import'
       @config = File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({})
-      @status = Sheepsafe::Status.new(@config)
-      @controller = Sheepsafe::Controller.new @config, @status, Logger.new(Sheepsafe::Controller::LOG_FILE)
-      update_config_with_status
+      @network = Sheepsafe::Network.new(@config)
+      @controller = Sheepsafe::Controller.new @config, @network, Logger.new(Sheepsafe::Controller::LOG_FILE)
+      update_config_with_network
     end
 
     def run
@@ -132,11 +132,11 @@ PLIST
     end
 
     private
-    def update_config_with_status
+    def update_config_with_network
       unless config.trusted_location
-        config.trusted_location = status.current_location
+        config.trusted_location = network.current_location
       end
-      @names = [status.current_network.current_ssid, status.current_network.current_bssid]
+      @names = [network.ssid, network.bssid]
     end
 
     def sheepsafe_bin_path

@@ -9,13 +9,13 @@ module Sheepsafe
   class Controller
     LOG_FILE = Sheepsafe::Config::FILE.sub(/\.yml/, '.log')
 
-    def initialize(config = nil, status = nil, logger = nil)
-      @config = config || Sheepsafe::Config.new
-      @status = status || Sheepsafe::Status.new(@config)
-      @logger = logger || begin
-                            STDOUT.reopen(File.open(LOG_FILE, (File::WRONLY | File::APPEND)))
-                            Logger.new(STDOUT)
-                          end
+    def initialize(config = nil, network = nil, logger = nil)
+      @config  = config  || Sheepsafe::Config.new
+      @network = network || Sheepsafe::Network.new(@config)
+      @logger  = logger  || begin
+                              STDOUT.reopen(File.open(LOG_FILE, (File::WRONLY | File::APPEND)))
+                              Logger.new(STDOUT)
+                            end
     end
 
     def run
@@ -31,7 +31,7 @@ module Sheepsafe
             bring_socks_proxy 'up'
             system "scselect #{@config.untrusted_location}"
           end
-          @config.last_network = @status.current_network
+          @config.last_network = @network
           @config.write
         end
       else
@@ -41,19 +41,19 @@ module Sheepsafe
     end
 
     def network_up?
-      @status.network_up?
+      @network.up?
     end
 
     def network_changed?
-      @status.current_network != @config.last_network
+      @network.ssid != @config.last_network.ssid || @network.bssid != @config.last_network.bssid
     end
 
     def switch_to_trusted?
-      @status.current_network.trusted?
+      @network.trusted?
     end
 
     def switch_to_untrusted?
-      !@status.current_network.trusted?
+      !@network.trusted?
     end
 
     def bring_socks_proxy(direction)
