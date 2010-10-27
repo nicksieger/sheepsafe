@@ -16,7 +16,6 @@ module Sheepsafe
       intro_message
       config_prompts
       setup_network_location
-      setup_untrusted_location
       write_config
       write_launchd_plist
       register_launchd_task
@@ -60,12 +59,10 @@ MSG
 
     def setup_network_location
       if agree "Next, I'll create and switch to the \"Untrusted\" location in Network Preferences. OK\? (yes/no)\n"
-        system "networksetup -createlocation Untrusted populate"
+        system "networksetup -createlocation Untrusted populate" unless `networksetup -listlocations` =~ /Untrusted/m
         system "networksetup -switchtolocation Untrusted"
       end
-    end
 
-    def setup_untrusted_location
       if agree "Next, I'll set up the SOCKS proxy in the \"Untrusted\" location for you. OK\? (yes/no)\n"
         system "networksetup -setsocksfirewallproxy AirPort localhost #{config.socks_port}"
       end
