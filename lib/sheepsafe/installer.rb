@@ -15,7 +15,7 @@ module Sheepsafe
     def run
       intro_message
       config_prompts
-      manual_network_location_prompt
+      setup_network_location
       setup_untrusted_location
       write_config
       write_launchd_plist
@@ -59,10 +59,11 @@ MSG
       config.trusted_names = @names if config.trusted_names.empty?
     end
 
-    def manual_network_location_prompt
-      say "Next, I need you to create and switch to the \"Untrusted\" location in Network preferences."
-      system "open /System/Library/PreferencePanes/Network.prefPane"
-      ask "Press ENTER when done."
+    def setup_network_location
+      if agree "Next, I'll create and switch to the \"Untrusted\" location in Network Preferences. OK\? (yes/no)\n"
+        system "networksetup -createlocation Untrusted populate"
+        system "networksetup -switchtolocation Untrusted"
+      end
     end
 
     def setup_untrusted_location
