@@ -28,6 +28,9 @@ Welcome to Sheepsafe!
 If this is your first time using Sheepsafe, you probably want to set it up.
 
 To do that, run \`sheepsafe install\' now.
+
+If you\'re updating to a new version of Sheepsafe and want to keep your
+current configuration, run \`sheepsafe update\'.
 ===========================================================================
   ]
 

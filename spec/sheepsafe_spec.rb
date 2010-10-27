@@ -149,7 +149,7 @@ describe Sheepsafe::Installer do
     config.should_receive(:write)
     controller.should_receive(:run)
     installer.should_receive(:write_launchd_plist) # don't want to actually touch plist file
-    installer.run
+    installer.install
     @messages.should_not be_empty
     @commands.should_not be_empty
   end

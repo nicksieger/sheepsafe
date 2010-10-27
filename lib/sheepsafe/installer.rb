@@ -12,7 +12,7 @@ module Sheepsafe
       update_config_with_network
     end
 
-    def run
+    def install
       intro_message
       config_prompts
       setup_network_location
@@ -130,6 +130,11 @@ PLIST
       end
       Dir['~/.sheepsafe.*'].each {|f| File.unlink f rescue nil}
       say "Uninstall finished."
+    end
+
+    def update
+      write_launchd_plist
+      register_launchd_task
     end
 
     private
