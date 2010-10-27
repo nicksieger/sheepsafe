@@ -133,6 +133,7 @@ PLIST
     end
 
     def update
+      system "launchctl unload #{PLIST_FILE}"
       write_launchd_plist
       register_launchd_task
     end
