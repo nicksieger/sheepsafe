@@ -8,9 +8,9 @@ module Sheepsafe
     ARRAY_ATTRS = %w(trusted_names)
 
     def self.load_config
-      File.open(FILE) {|f| YAML.load(f) }
-    rescue
-      raise "Unable to read ~/sheepsafe.yml; please run sheepsafe-install"
+      YAML.load_file(FILE)
+    rescue Errno::ENOENT
+      raise "Unable to read ~/.sheepsafe.yml; please run sheepsafe-install"
     end
 
     attr_reader :config
@@ -30,7 +30,7 @@ module Sheepsafe
     end
 
     def write
-      File.open(FILE, "w") {|f| f << YAML.dump(@config) }
+      File.open(FILE, "w") {|f| f << YAML.dump(config) }
     end
   end
 end
