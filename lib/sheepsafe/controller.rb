@@ -45,7 +45,7 @@ module Sheepsafe
     end
 
     def network_changed?
-      @network.ssid != @config.last_network.ssid || @network.bssid != @config.last_network.bssid
+      @config.last_network.nil? || @network.ssid != @config.last_network.ssid || @network.bssid != @config.last_network.bssid
     end
 
     def switch_to_trusted?

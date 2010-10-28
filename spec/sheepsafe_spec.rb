@@ -21,7 +21,12 @@ describe Sheepsafe::Controller do
 
   context "#network_changed?" do
     it "is when the current_network is different than the last_network" do
-      config.should_receive(:last_network).and_return double("network", :ssid => "last", :bssid => nil)
+      config.stub!(:last_network).and_return double("network", :ssid => "last", :bssid => nil)
+      controller.network_changed?.should be_true
+    end
+
+    it "is when there is no last network" do
+      config.stub!(:last_network).and_return nil
       controller.network_changed?.should be_true
     end
   end
