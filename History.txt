@@ -1,3 +1,9 @@
+=== 0.2.2
+
+- Make Ruby wrapper around socks daemon that keeps trying to run ssh
+  even if it exits due to bad or no connection
+- Add `sheepsafe proxy up/down` to manually up/down the proxy
+
 === 0.2.1
 
 - Fix regression if config.last_network.nil?

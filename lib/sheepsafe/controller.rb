@@ -19,6 +19,11 @@ module Sheepsafe
     end
 
     def run
+      if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down'
+        bring_socks_proxy ARGV[1]
+        return
+      end
+
       log("Sheepsafe starting")
       if network_up?
         if network_changed?
@@ -58,8 +63,18 @@ module Sheepsafe
 
     def bring_socks_proxy(direction)
       Daemons.run_proc '.sheepsafe.proxy', :ARGV => [direction == 'up' ? 'start' : 'stop'], :dir_mode => :normal, :dir => ENV['HOME'] do
-        log("Starting ssh -ND #{@config.socks_port} #{@config.ssh_host}")
-        exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
+        pid = nil
+        trap("TERM") do
+          Process.kill("TERM", pid)
+          exit 0
+        end
+        loop do
+          pid = fork do
+            exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
+          end
+          Process.waitpid(pid, 0)
+          sleep 1
+        end
       end
     end
 
