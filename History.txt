@@ -1,3 +1,9 @@
+=== 0.2.3
+
+- Recycle the proxy server on every launch when on the Untrusted
+  network. Deals with moving between different untrusted networks and
+  responding to those changes automatically.
+
 === 0.2.2
 
 - Make Ruby wrapper around socks daemon that keeps trying to run ssh
