@@ -38,6 +38,10 @@ module Sheepsafe
           end
           @config.last_network = @network
           @config.write
+        elsif !@network.trusted?
+          # recycle the proxy server on network changes
+          bring_socks_proxy 'down'
+          bring_socks_proxy 'up'
         end
       else
         log("AirPort is off")

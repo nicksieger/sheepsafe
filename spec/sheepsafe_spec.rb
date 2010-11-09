@@ -50,8 +50,16 @@ describe Sheepsafe::Controller do
       config.stub :last_network => network
     end
 
-    it "does nothing" do
+    it "does not touch config" do
+      network.stub :trusted? => true
       config.should_not_receive(:write)
+      controller.run
+    end
+
+    it "recycles the proxy server process when on the untrusted network" do
+      network.stub :trusted? => false
+      controller.should_receive(:bring_socks_proxy).with('down').ordered
+      controller.should_receive(:bring_socks_proxy).with('up').ordered
       controller.run
     end
   end
