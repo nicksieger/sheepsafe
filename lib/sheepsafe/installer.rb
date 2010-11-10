@@ -79,6 +79,7 @@ MSG
     # For details see http://tech.inhelsinki.nl/locationchanger/
     def write_launchd_plist
       say "Setting up launchd configuration file #{PLIST_FILE}..."
+      Dir.mkdir(File.dirname(PLIST_FILE)) unless File.directory?(File.dirname(PLIST_FILE))
       plist = <<-PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
