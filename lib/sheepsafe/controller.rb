@@ -63,8 +63,15 @@ module Sheepsafe
     end
 
     def bring_socks_proxy(direction)
-      Daemons.run_proc('.sheepsafe.proxy', :ARGV => [direction == 'up' ? 'start' : 'stop'],
-                       :dir_mode => :normal, :dir => ENV['HOME']) do
+      cmd = case direction
+            when 'up'
+              'start'
+            when 'down'
+              'stop'
+            else
+              direction
+            end
+      Daemons.run_proc('.sheepsafe.proxy', :ARGV => [cmd], :dir_mode => :normal, :dir => ENV['HOME']) do
         pid = nil
         trap("TERM") do
           Process.kill("TERM", pid)
