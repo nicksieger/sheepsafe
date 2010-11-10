@@ -91,14 +91,14 @@ module Sheepsafe
           pid = fork do
             exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
           end
-          Process.waitpid(pid, Process::WNOHANG)
+          Process.waitpid(pid)
           sleep 1
         end
       end
     end
 
     def proxy_running?
-      File.exist?("#{ENV['HOME']}/.sheepsafe.proxy.pid")
+      File.exist?("#{ENV['HOME']}/.sheepsafe.proxy.pid") && File.read("#{ENV['HOME']}/.sheepsafe.proxy.pid").to_i > 0
     end
 
     def notify_ok(msg)
