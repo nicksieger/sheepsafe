@@ -19,8 +19,8 @@ module Sheepsafe
     end
 
     def run
-      if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down'
-        bring_socks_proxy ARGV[1]
+      if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down/kick'
+        bring_socks_proxy(ARGV[1] == 'kick' ? 'restart' : ARGV[1])
         return
       end
 

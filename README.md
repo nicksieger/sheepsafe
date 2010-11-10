@@ -49,6 +49,21 @@ but this setup Works For Me.
 - After installing the gem, run `sheepsafe install` and follow the
   prompts for configuring Sheepsafe.
 
+## Usage
+
+- `sheepsafe`: when run with no arguments, this checks your current
+  network and updates settings if necessary.
+- `sheepsafe install`: Run the command-line installer. Fill out the
+  prompts and you're ready.
+- `sheepsafe update`: Run when you've upgraded the gem to make sure
+  launchd is running the most recent version.
+- `sheepsafe add`: Add the current network to your list of trusted
+  networks.
+- `sheepsafe list`: Show the list of trusted networks.
+- `sheepsafe proxy up`: Manually start the SSH SOCKS proxy.
+- `sheepsafe proxy down`: Manually stop the SSH SOCKS proxy.
+- `sheepsafe proxy kick`: Manually restart the SSH SOCKS proxy.
+
 ## Growl
 
 If you wish to receive Growl notifications when Sheepsafe is switching
