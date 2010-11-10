@@ -32,9 +32,7 @@ module Sheepsafe
             system "scselect #{@config.trusted_location}"
             bring_socks_proxy 'down'
           elsif switch_to_untrusted?
-            notify_warning "Switching to #{@config.untrusted_location} location"
             bring_socks_proxy 'up'
-            system "scselect #{@config.untrusted_location}"
           end
           @config.last_network = @network
           @config.write
@@ -65,17 +63,29 @@ module Sheepsafe
     end
 
     def bring_socks_proxy(direction)
-      Daemons.run_proc '.sheepsafe.proxy', :ARGV => [direction == 'up' ? 'start' : 'stop'], :dir_mode => :normal, :dir => ENV['HOME'] do
+      Daemons.run_proc('.sheepsafe.proxy', :ARGV => [direction == 'up' ? 'start' : 'stop'],
+                       :dir_mode => :normal, :dir => ENV['HOME']) do
         pid = nil
         trap("TERM") do
           Process.kill("TERM", pid)
           exit 0
         end
+        notify_warning "Switching to #{@config.untrusted_location} location"
+        notified = false
+        loop do
+          require 'open-uri'
+          length = open("http://example.com") {|f| f.meta['content-length'] } rescue nil
+          break if length == "596" # successful contact w/ example.com
+          notify_ok("Waiting for internet connection") unless notified
+          notified = true
+          sleep 5
+        end
+        system "scselect #{@config.untrusted_location}"
         loop do
           pid = fork do
             exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
           end
-          Process.waitpid(pid, 0)
+          Process.waitpid(pid, Process::WNOHANG)
           sleep 1
         end
       end

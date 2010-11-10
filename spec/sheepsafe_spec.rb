@@ -93,11 +93,25 @@ describe Sheepsafe::Controller do
     end
 
     context "to untrusted" do
-      it "changes to the untrusted location" do
+      it "brings the proxy up" do
         controller.should_receive(:switch_to_untrusted?).and_return true
-        controller.should_receive(:system).with("scselect untrusted_location")
         controller.should_receive(:bring_socks_proxy).with('up')
         controller.run
+      end
+
+      it "changes to the untrusted location after connecting to example.com" do
+        controller.should_receive(:switch_to_untrusted?).and_return true
+        controller.should_receive(:trap)
+        controller.should_receive(:open).and_return("596")
+        controller.should_receive(:system).with("scselect untrusted_location")
+        controller.should_receive(:fork).and_return(123)
+
+        Process.should_receive(:waitpid).and_raise(StandardError.new("jump"))
+        Daemons.should_receive(:run_proc).and_return do |*args|
+          args.last.call
+        end
+
+        lambda { controller.run }.should raise_error(StandardError)
       end
     end
   end
