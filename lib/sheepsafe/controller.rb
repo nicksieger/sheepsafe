@@ -20,7 +20,7 @@ module Sheepsafe
 
     def run
       if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down/kick'
-        bring_socks_proxy(ARGV[1] == 'kick' ? 'restart' : ARGV[1])
+        bring_socks_proxy ARGV[1]
         return
       end
 
@@ -32,6 +32,17 @@ module Sheepsafe
             system "scselect #{@config.trusted_location}"
             bring_socks_proxy 'down'
           elsif switch_to_untrusted?
+            notified = false
+            loop do
+              require 'open-uri'
+              length = open("http://example.com") {|f| f.meta['content-length'] } rescue nil
+              break if length == "596" # successful contact w/ example.com
+              notify_warning("Waiting for internet connection before switching") unless notified
+              notified = true
+              sleep 5
+            end
+            notify_warning "Switching to #{@config.untrusted_location} location"
+            system "scselect #{@config.untrusted_location}"
             bring_socks_proxy 'up'
           end
           @config.last_network = @network
@@ -64,10 +75,9 @@ module Sheepsafe
 
     def bring_socks_proxy(direction)
       cmd = case direction
-            when 'up'
-              'start'
-            when 'down'
-              'stop'
+            when 'up'   then 'start'
+            when 'down' then 'stop'
+            when 'kick' then 'restart'
             else
               direction
             end
@@ -77,17 +87,6 @@ module Sheepsafe
           Process.kill("TERM", pid)
           exit 0
         end
-        notified = false
-        loop do
-          require 'open-uri'
-          length = open("http://example.com") {|f| f.meta['content-length'] } rescue nil
-          break if length == "596" # successful contact w/ example.com
-          notify_warning("Waiting for internet connection before switching") unless notified
-          notified = true
-          sleep 5
-        end
-        notify_warning "Switching to #{@config.untrusted_location} location"
-        system "scselect #{@config.untrusted_location}"
         loop do
           pid = fork do
             exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
