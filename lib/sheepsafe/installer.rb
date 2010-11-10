@@ -138,6 +138,31 @@ PLIST
       write_launchd_plist
       register_launchd_task
     end
+    
+    def add
+	  @config  = config  || Sheepsafe::Config.new
+      @network = network || Sheepsafe::Network.new(@config)
+	  num = @config.trusted_names.count
+	  @config.trusted_names[num] = @network.ssid	
+	  say "Adding #{config.trusted_names[num]} to your trusted locations"
+	  write_config
+
+	  # Since we trust where we are...
+	  @controller = controller || Sheepsafe::Controller.new(@config, @network, Logger.new(Sheepsafe::Controller::LOG_FILE))
+	  @controller.bring_socks_proxy 'down'
+	  @controller.notify_ok "Switching to #{@config.trusted_location} location because of added network"
+      system "scselect #{@config.trusted_location}"	
+	end
+
+	def list
+	  @config  = config  || Sheepsafe::Config.new
+	  say "Currently trusted locations:"
+	  puts @config.trusted_names
+	end
+	
+	#
+	# Remove current network from trusted?
+	#
 
     private
     def update_config_with_network
