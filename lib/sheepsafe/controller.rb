@@ -70,16 +70,16 @@ module Sheepsafe
           Process.kill("TERM", pid)
           exit 0
         end
-        notify_warning "Switching to #{@config.untrusted_location} location"
         notified = false
         loop do
           require 'open-uri'
           length = open("http://example.com") {|f| f.meta['content-length'] } rescue nil
           break if length == "596" # successful contact w/ example.com
-          notify_ok("Waiting for internet connection") unless notified
+          notify_warning("Waiting for internet connection before switching") unless notified
           notified = true
           sleep 5
         end
+        notify_warning "Switching to #{@config.untrusted_location} location"
         system "scselect #{@config.untrusted_location}"
         loop do
           pid = fork do
