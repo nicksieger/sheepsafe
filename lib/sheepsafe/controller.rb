@@ -87,6 +87,7 @@ module Sheepsafe
           Process.kill("TERM", pid)
           exit 0
         end
+        sleep 2                 # wait a bit before starting proxy
         loop do
           pid = fork do
             exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
