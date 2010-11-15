@@ -38,8 +38,12 @@ MSG
         q.default = config.ssh_host
       end
 
+      config.ssh_port = ask "SSH Port >\n" do |q|
+        q.default = config.ssh_port || 22
+      end
+
       say "Testing connectivitity to #{config.ssh_host}..."
-      system "ssh #{config.ssh_host} true"
+      system "ssh -p #{config.ssh_port} #{config.ssh_host} true"
       unless $?.success?
         abort "Sorry! that ssh host was no good."
       end
