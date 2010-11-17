@@ -33,14 +33,14 @@ describe Sheepsafe::Controller do
 
   context "#switch_to_trusted?" do
     it "is when the current network is trusted" do
-      network.stub :trusted? => true
+      network.stub :trustworthy? => true
       controller.switch_to_trusted?.should be_true
     end
   end
 
   context "#switch_to_untrusted?" do
     it "is when the current network is trusted" do
-      network.stub :trusted? => false
+      network.stub :trustworthy? => false
       controller.switch_to_untrusted?.should be_true
     end
   end
@@ -51,13 +51,13 @@ describe Sheepsafe::Controller do
     end
 
     it "does not touch config" do
-      network.stub :trusted? => true
+      network.stub :trustworthy? => true
       config.should_not_receive(:write)
       controller.run
     end
 
     it "recycles the proxy server process when on the untrusted network" do
-      network.stub :trusted? => false
+      network.stub :trustworthy? => false
       controller.should_receive(:bring_socks_proxy).with('restart')
       controller.run
     end

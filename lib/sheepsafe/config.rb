@@ -3,9 +3,9 @@ require 'yaml'
 module Sheepsafe
   class Config
     FILE = File.expand_path('~/.sheepsafe.yml')
-    DEFAULT_CONFIG = {"untrusted_location" => "Untrusted", "socks_port" => "9999"}
-    ATTRS = %w(trusted_location untrusted_location last_network ssh_host socks_port)
-    ARRAY_ATTRS = %w(trusted_names)
+    DEFAULT_CONFIG = {"untrusted_location" => "Untrusted", "socks_port" => "9999", "trust_encrypted?" => "false"}
+    ATTRS = %w(trusted_location untrusted_location last_network ssh_host socks_port trust_encrypted?)
+    ARRAY_ATTRS = %w(trusted_names untrusted_names)
 
     def self.load_config
       YAML.load_file(FILE)

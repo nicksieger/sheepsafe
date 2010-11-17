@@ -8,8 +8,16 @@ module Sheepsafe
       @config = config || Sheepsafe::Config.new({})
     end
 
+    def trustworthy?
+      !untrusted? && (encrypted? && @config.trust_encrypted? || trusted?)
+    end
+
     def trusted?
-      encrypted? || @config.trusted_names.include?(ssid) || @config.trusted_names.include?(bssid)
+      @config.trusted_names.include?(ssid) || @config.trusted_names.include?(bssid)
+    end
+
+    def untrusted?
+      @config.untrusted_names.include?(ssid) || @config.untrusted_names.include?(bssid)
     end
 
     def encrypted?
