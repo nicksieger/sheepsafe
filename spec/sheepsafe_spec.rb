@@ -121,6 +121,34 @@ describe Sheepsafe::Network do
     it { should be_trusted }
   end
 
+  context "with untrusted SSID" do
+    let(:config) { Sheepsafe::Config.new({"untrusted_names" => [current_network.ssid]}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
+  end
+
+  context "with untrusted BSSID" do
+    let(:config) { Sheepsafe::Config.new({"untrusted_names" => [current_network.bssid]}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
+  end
+
+  context "with trusted encryption" do
+    let(:config) { Sheepsafe::Config.new({"trust_encrypted?" => true}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should be_trusted if subject.encrypted? }
+  end
+
+  context "with untrusted encryption" do
+    let(:config) { Sheepsafe::Config.new({"trust_encrypted?" => false}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
+  end
+
   context "with no trusted names" do
     subject { Sheepsafe::Network.new }
 
