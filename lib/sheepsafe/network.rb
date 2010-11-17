@@ -9,7 +9,11 @@ module Sheepsafe
     end
 
     def trusted?
-      @config.trusted_names.include?(ssid) || @config.trusted_names.include?(bssid)
+      encrypted? || @config.trusted_names.include?(ssid) || @config.trusted_names.include?(bssid)
+    end
+
+    def encrypted?
+      !(@data["802.11 auth"] == "open" or @data["link auth"] == "open")
     end
 
     def up?
