@@ -90,7 +90,7 @@ module Sheepsafe
         sleep 2                 # wait a bit before starting proxy
         loop do
           pid = fork do
-            exec("ssh -ND #{@config.socks_port} #{@config.ssh_host}")
+            exec("ssh -p #{@config.ssh_port } -ND #{@config.socks_port} #{@config.ssh_host}")
           end
           Process.waitpid(pid)
           sleep 1
