@@ -33,14 +33,14 @@ describe Sheepsafe::Controller do
 
   context "#switch_to_trusted?" do
     it "is when the current network is trusted" do
-      network.stub :trusted? => true
+      network.stub :trustworthy? => true
       controller.switch_to_trusted?.should be_true
     end
   end
 
   context "#switch_to_untrusted?" do
     it "is when the current network is trusted" do
-      network.stub :trusted? => false
+      network.stub :trustworthy? => false
       controller.switch_to_untrusted?.should be_true
     end
   end
@@ -51,13 +51,13 @@ describe Sheepsafe::Controller do
     end
 
     it "does not touch config" do
-      network.stub :trusted? => true
+      network.stub :trustworthy? => true
       config.should_not_receive(:write)
       controller.run
     end
 
     it "recycles the proxy server process when on the untrusted network" do
-      network.stub :trusted? => false
+      network.stub :trustworthy? => false
       controller.should_receive(:bring_socks_proxy).with('restart')
       controller.run
     end
@@ -119,6 +119,34 @@ describe Sheepsafe::Network do
     subject { Sheepsafe::Network.new(config) }
 
     it { should be_trusted }
+  end
+
+  context "with untrusted SSID" do
+    let(:config) { Sheepsafe::Config.new({"untrusted_names" => [current_network.ssid]}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
+  end
+
+  context "with untrusted BSSID" do
+    let(:config) { Sheepsafe::Config.new({"untrusted_names" => [current_network.bssid]}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
+  end
+
+  context "with trusted encryption" do
+    let(:config) { Sheepsafe::Config.new({"trust_encrypted?" => true}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should be_trusted if subject.encrypted? }
+  end
+
+  context "with untrusted encryption" do
+    let(:config) { Sheepsafe::Config.new({"trust_encrypted?" => false}) }
+    subject { Sheepsafe::Network.new(config) }
+
+    it { should_not be_trusted }
   end
 
   context "with no trusted names" do

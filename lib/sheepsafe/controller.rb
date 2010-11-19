@@ -47,7 +47,7 @@ module Sheepsafe
           end
           @config.last_network = @network
           @config.write
-        elsif !@network.trusted?
+        elsif !@network.trustworthy?
           # recycle the proxy server on network changes
           bring_socks_proxy 'restart'
         end
@@ -66,11 +66,11 @@ module Sheepsafe
     end
 
     def switch_to_trusted?
-      @network.trusted?
+      @network.trustworthy?
     end
 
     def switch_to_untrusted?
-      !@network.trusted?
+      !@network.trustworthy?
     end
 
     def bring_socks_proxy(direction)
