@@ -1,3 +1,18 @@
+=== 0.2.5
+
+- Wait a bit before starting proxy when switching networks
+- Allow specification of port for ssh (thanks Kevin Ball)
+- Add wifi blacklist (thanks Tim Felgentreff)
+- Add ability to trust encrypted wifi networks (thanks Tim Felgentreff)
+
+=== 0.2.4
+
+- Ensure the ~/Library/LaunchAgents directory exists
+- Docs and `sheepsafe proxy kick`
+- sheepsafe list|add commands (thanks Ted Nielsen)
+- Use connection response from http://example.com as indication that
+  we're past a paywall wifi network (idea thanks to Adam Keys)
+
 === 0.2.3
 
 - Recycle the proxy server on every launch when on the Untrusted
