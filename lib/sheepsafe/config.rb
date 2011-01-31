@@ -32,5 +32,12 @@ module Sheepsafe
     def write
       File.open(FILE, "w") {|f| f << YAML.dump(config) }
     end
+
+    def ssh_args
+      args = ""
+      args << "-p #{ssh_port} " if ssh_port
+      args << "-ND #{socks_port} #{ssh_host}"
+      args
+    end
   end
 end

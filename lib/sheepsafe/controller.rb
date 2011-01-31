@@ -88,11 +88,17 @@ module Sheepsafe
           exit 0
         end
         sleep 2                 # wait a bit before starting proxy
+        exit_count = 0
+        ssh_command = "ssh #{@config.ssh_args}"
         loop do
           pid = fork do
-            exec("ssh -p #{@config.ssh_port } -ND #{@config.socks_port} #{@config.ssh_host}")
+            exec(ssh_command)
           end
-          Process.waitpid(pid)
+          status = Process.waitpid(pid)
+          exit_count += 1
+          if exit_count % 2 == 1 && exit_count < 10
+            log "command exited #{exit_count} times:\n#{}\nlast time with #{status.to_s}"
+          end
           sleep 1
         end
       end
@@ -117,7 +123,15 @@ module Sheepsafe
     end
 
     def log(msg)
-      @logger.info(msg)
+      if @logger
+        @logger.info(msg)
+      else
+        with_log_file {|f| Logger.new(f).info(msg) }
+      end
+    end
+
+    def with_log_file(&block)
+      File.open(LOG_FILE, (File::WRONLY | File::APPEND), &block)
     end
   end
 end

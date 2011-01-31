@@ -104,6 +104,23 @@ describe Sheepsafe::Controller do
   end
 end
 
+describe Sheepsafe::Config, "#ssh_args" do
+  let(:config) { Sheepsafe::Config.new({"ssh_host" => "dummyhost", "socks_port" => "1234"}) }
+
+  it "should include -ND socks_port with SOCKS proxy port" do
+    config.ssh_args.should =~ /-ND 1234/
+  end
+
+  it "should not include -p ssh_port if none is specified" do
+    config.ssh_args.should == "-ND 1234 dummyhost"
+  end
+
+  it "should include -p ssh_port if present" do
+    config.ssh_port = "2323"
+    config.ssh_args.should == "-p 2323 -ND 1234 dummyhost"
+  end
+end
+
 describe Sheepsafe::Network do
   let(:current_network) { Sheepsafe::Network.new }
 
