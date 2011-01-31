@@ -1,3 +1,9 @@
+=== 0.2.6
+
+- Fix error with proxy when ssh_port is not configured
+- Try to log if proxy exits repeatedly
+- Don't reopen stdout but capture it to the log file
+
 === 0.2.5
 
 - Wait a bit before starting proxy when switching networks
