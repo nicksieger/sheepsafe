@@ -9,22 +9,37 @@ module Sheepsafe
   class Controller
     LOG_FILE = Sheepsafe::Config::FILE.sub(/\.yml/, '.log')
 
+    class TeeStdout
+      def initialize(controller)
+        @stdout, @controller = $stdout, controller
+      end
+
+      def write(*args,&block)
+        @stdout.write(*args, &block)
+        @controller.with_log_file {|f| f.write(*args, &block) }
+      end
+
+      def method_missing(meth, *args, &block)
+        @stdout.send(meth, *args, &block)
+        @controller.with_log_file {|f| f.send(meth, *args, &block) }
+      end
+    end
+
     def initialize(config = nil, network = nil, logger = nil)
       @config  = config  || Sheepsafe::Config.new
       @network = network || Sheepsafe::Network.new(@config)
-      @logger  = logger  || begin
-                              STDOUT.reopen(File.open(LOG_FILE, (File::WRONLY | File::APPEND)))
-                              Logger.new(STDOUT)
-                            end
+      @logger  = logger
+      $stdout  = TeeStdout.new(self)
     end
 
     def run
+      log("Sheepsafe starting")
+
       if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down/kick'
         bring_socks_proxy ARGV[1]
         return
       end
 
-      log("Sheepsafe starting")
       if network_up?
         if network_changed?
           if switch_to_trusted?
