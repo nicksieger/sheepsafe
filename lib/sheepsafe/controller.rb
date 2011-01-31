@@ -109,10 +109,10 @@ module Sheepsafe
           pid = fork do
             exec(ssh_command)
           end
-          status = Process.waitpid(pid)
+          Process.waitpid(pid)
           exit_count += 1
           if exit_count % 2 == 1 && exit_count < 10
-            log "command exited #{exit_count} times:\n#{}\nlast time with #{status.to_s}"
+            log "command exited #{exit_count} times:\n#{}\nlast time with #{$?.exitstatus}"
           end
           sleep 1
         end
