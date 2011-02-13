@@ -51,7 +51,7 @@ module Sheepsafe
             loop do
               require 'open-uri'
               length = open("http://example.com") {|f| f.meta['content-length'] } rescue nil
-              break if length == "596" # successful contact w/ example.com
+              break if length == "3067" # successful contact w/ example.com
               notify_warning("Waiting for internet connection before switching") unless notified
               notified = true
               sleep 5
@@ -112,7 +112,7 @@ module Sheepsafe
           Process.waitpid(pid)
           exit_count += 1
           if exit_count % 2 == 1 && exit_count < 10
-            log "command exited #{exit_count} times:\n#{}\nlast time with #{$?.exitstatus}"
+            log "command '#{ssh_command}' exited #{exit_count} times:\nlast time with #{$?.exitstatus}"
           end
           sleep 1
         end
