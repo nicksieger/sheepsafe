@@ -1,3 +1,7 @@
+=== 0.2.7
+
+- example.com changed, updating content length
+
 === 0.2.6
 
 - Fix error with proxy when ssh_port is not configured
