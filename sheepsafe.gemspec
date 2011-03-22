@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name              = 'sheepsafe'
-  s.version           = '0.2.7'
-  s.date              = '2011-02-13'
+  s.version           = '0.2.8'
+  s.date              = '2011-03-22'
 
   s.rubyforge_project = %q{caldersphere}
 

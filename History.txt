@@ -1,3 +1,7 @@
+=== 0.2.8
+
+- example.com changed again, search for /RFC 2606/ in body instead
+
 === 0.2.7
 
 - example.com changed, updating content length
