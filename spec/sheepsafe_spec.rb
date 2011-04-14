@@ -58,7 +58,8 @@ describe Sheepsafe::Controller do
 
     it "recycles the proxy server process when on the untrusted network" do
       network.stub :trustworthy? => false
-      controller.should_receive(:bring_socks_proxy).with('restart')
+      controller.should_receive(:bring_socks_proxy).with('down')
+      controller.should_receive(:bring_socks_proxy).with('up')
       controller.run
     end
   end
@@ -97,6 +98,7 @@ describe Sheepsafe::Controller do
         controller.should_receive(:switch_to_untrusted?).and_return true
         controller.should_receive(:open).and_return("596")
         controller.should_receive(:system).with("scselect untrusted_location")
+        controller.should_receive(:bring_socks_proxy).with('down')
         controller.should_receive(:bring_socks_proxy).with('up')
         controller.run
       end

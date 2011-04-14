@@ -40,12 +40,13 @@ module Sheepsafe
         return
       end
 
+      # Always recycle the proxy server on network changes
+      bring_socks_proxy 'down'
       if network_up?
         if network_changed?
           if switch_to_trusted?
             notify_ok "Switching to #{@config.trusted_location} location"
             system "scselect #{@config.trusted_location}"
-            bring_socks_proxy 'down'
           elsif switch_to_untrusted?
             notified = false
             loop do
@@ -63,8 +64,7 @@ module Sheepsafe
           @config.last_network = @network
           @config.write
         elsif !@network.trustworthy?
-          # recycle the proxy server on network changes
-          bring_socks_proxy 'restart'
+          bring_socks_proxy 'up'
         end
       else
         log("AirPort is off")
@@ -102,7 +102,7 @@ module Sheepsafe
           Process.kill("TERM", pid)
           exit 0
         end
-        sleep 2                 # wait a bit before starting proxy
+        sleep 5                 # wait a bit before starting proxy
         exit_count = 0
         ssh_command = "ssh #{@config.ssh_args}"
         loop do

@@ -1,3 +1,8 @@
+=== 0.3.0
+
+- Always recycle proxy on network changes, and wait a few seconds more
+  when bringing the proxy up so that the network change is in effect
+
 === 0.2.8
 
 - example.com changed again, search for /RFC 2606/ in body instead
