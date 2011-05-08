@@ -87,19 +87,19 @@ MSG
       plist = <<-PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
-	"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Label</key>
-	<string>org.rubygems.sheepsafe</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>#{sheepsafe_bin_path}</string>
-	</array>
-	<key>WatchPaths</key>
-	<array>
-		<string>/Library/Preferences/SystemConfiguration</string>
-	</array>
+  <key>Label</key>
+  <string>org.rubygems.sheepsafe</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>#{sheepsafe_bin_path}</string>
+  </array>
+  <key>WatchPaths</key>
+  <array>
+    <string>/Library/Preferences/SystemConfiguration</string>
+  </array>
         <!-- We specify PATH here because /usr/local/bin, where grownotify -->
         <!-- is usually installed, is not in the script path by default. -->
         <key>EnvironmentVariables</key>
@@ -144,7 +144,7 @@ PLIST
     end
 
     def add
-      @config.trusted_names << @network.ssid	
+      @config.trusted_names << @network.ssid
       @config.last_network = nil
       say "Adding #{config.trusted_names[num]} to your trusted locations"
       write_config
