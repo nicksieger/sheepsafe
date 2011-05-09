@@ -160,9 +160,17 @@ PLIST
       puts @config.trusted_names
     end
 
-    #
-    # Needed? Remove current network from trusted
-    #
+    def remove
+      unless config.trusted_names.include?(network.ssid)
+        say "#{network.ssid} isn't trusted"
+      else
+        say "Removing #{network.ssid} from your trusted locations"
+        @config.trusted_names.delete(@network.ssid)
+        @config.last_network = nil
+        write_config
+        @controller.run
+      end
+    end
 
     private
     def update_config_with_network
