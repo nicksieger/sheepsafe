@@ -87,19 +87,19 @@ MSG
       plist = <<-PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
-	"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Label</key>
-	<string>org.rubygems.sheepsafe</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>#{sheepsafe_bin_path}</string>
-	</array>
-	<key>WatchPaths</key>
-	<array>
-		<string>/Library/Preferences/SystemConfiguration</string>
-	</array>
+  <key>Label</key>
+  <string>org.rubygems.sheepsafe</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>#{sheepsafe_bin_path}</string>
+  </array>
+  <key>WatchPaths</key>
+  <array>
+    <string>/Library/Preferences/SystemConfiguration</string>
+  </array>
         <!-- We specify PATH here because /usr/local/bin, where grownotify -->
         <!-- is usually installed, is not in the script path by default. -->
         <key>EnvironmentVariables</key>
@@ -133,7 +133,7 @@ PLIST
         system "launchctl unload #{PLIST_FILE}"
         File.unlink PLIST_FILE rescue nil
       end
-      Dir['~/.sheepsafe.*'].each {|f| File.unlink f rescue nil}
+      Dir['~/.sheepsafe/sheepsafe.*'].each {|f| File.unlink f rescue nil}
       say "Uninstall finished."
     end
 
@@ -144,11 +144,15 @@ PLIST
     end
 
     def add
-      @config.trusted_names << @network.ssid	
-      @config.last_network = nil
-      say "Adding #{config.trusted_names[num]} to your trusted locations"
-      write_config
-      @controller.run
+      if config.trusted_names.include?(network.ssid)
+        say "#{network.ssid} is already trusted"
+      else
+        say "Adding #{network.ssid} to your trusted locations"
+        @config.trusted_names << @network.ssid
+        @config.last_network = nil
+        write_config
+        @controller.run
+      end
     end
 
     def list
@@ -156,9 +160,17 @@ PLIST
       puts @config.trusted_names
     end
 
-    #
-    # Needed? Remove current network from trusted
-    #
+    def remove
+      unless config.trusted_names.include?(network.ssid)
+        say "#{network.ssid} isn't trusted"
+      else
+        say "Removing #{network.ssid} from your trusted locations"
+        @config.trusted_names.delete(@network.ssid)
+        @config.last_network = nil
+        write_config
+        @controller.run
+      end
+    end
 
     private
     def update_config_with_network

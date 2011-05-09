@@ -50,9 +50,8 @@ module Sheepsafe
           elsif switch_to_untrusted?
             notified = false
             loop do
-              require 'open-uri'
-              is_example_com = open("http://example.com") {|f| f.read[/(RFC 2606)/] == "RFC 2606"} rescue nil
-              break if is_example_com
+              system "ssh -p #{@config.ssh_port} #{@config.ssh_host} true &> /dev/null"
+              break if $?.success?
               notify_warning("Waiting for internet connection before switching") unless notified
               notified = true
               sleep 5
@@ -96,7 +95,7 @@ module Sheepsafe
             else
               direction
             end
-      Daemons.run_proc('.sheepsafe.proxy', :ARGV => [cmd], :dir_mode => :normal, :dir => ENV['HOME']) do
+      Daemons.run_proc('sheepsafe.proxy', :ARGV => [cmd], :dir_mode => :normal, :dir => "#{ENV['HOME']}/.sheepsafe") do
         pid = nil
         trap("TERM") do
           Process.kill("TERM", pid)
@@ -120,7 +119,7 @@ module Sheepsafe
     end
 
     def proxy_running?
-      File.exist?("#{ENV['HOME']}/.sheepsafe.proxy.pid") && File.read("#{ENV['HOME']}/.sheepsafe.proxy.pid").to_i > 0
+      File.exist?("#{ENV['HOME']}/.sheepsafe/sheepsafe.proxy.pid") && File.read("#{ENV['HOME']}/.sheepsafe/sheepsafe.proxy.pid").to_i > 0
     end
 
     def notify_ok(msg)
