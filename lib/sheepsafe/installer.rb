@@ -133,7 +133,7 @@ PLIST
         system "launchctl unload #{PLIST_FILE}"
         File.unlink PLIST_FILE rescue nil
       end
-      Dir['~/.sheepsafe/sheepsafe.*'].each {|f| File.unlink f rescue nil}
+      system "rm -r ~/.sheepsafe"
       say "Uninstall finished."
     end
 
