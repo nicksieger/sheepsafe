@@ -14,6 +14,7 @@ module Sheepsafe
     end
 
     def install
+      migrate_old_config_path
       intro_message
       config_prompts
       setup_network_location
@@ -27,6 +28,21 @@ module Sheepsafe
       if !File.directory? "#{ENV['HOME']}/.sheepsafe/"
         Dir.mkdir("#{ENV['HOME']}/.sheepsafe/")
       end
+    end
+
+    def migrate_old_config_path
+      reinitialize = false
+      if File.exist?("#{ENV['HOME']}/.sheepsafe.log")
+        reinitialize = true
+        say "Moving old sheepsafe.log file to new directory."
+        system "mv ~/.sheepsafe.log ~/.sheepsafe/sheepsafe.log"
+      end
+      if File.exist?("#{ENV['HOME']}/.sheepsafe.yml")
+        reinitialize = true
+        say "Moving old sheepsafe.yml file to new directory."
+        system "mv ~/.sheepsafe.yml ~/.sheepsafe/sheepsafe.yml"
+      end
+      initialize if reinitialize
     end
 
     def intro_message
