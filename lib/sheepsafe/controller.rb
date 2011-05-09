@@ -95,7 +95,7 @@ module Sheepsafe
             else
               direction
             end
-      Daemons.run_proc('.sheepsafe.proxy', :ARGV => [cmd], :dir_mode => :normal, :dir => ENV['HOME']) do
+      Daemons.run_proc('sheepsafe.proxy', :ARGV => [cmd], :dir_mode => :normal, :dir => "#{ENV['HOME']}/.sheepsafe") do
         pid = nil
         trap("TERM") do
           Process.kill("TERM", pid)
@@ -119,7 +119,7 @@ module Sheepsafe
     end
 
     def proxy_running?
-      File.exist?("#{ENV['HOME']}/.sheepsafe.proxy.pid") && File.read("#{ENV['HOME']}/.sheepsafe.proxy.pid").to_i > 0
+      File.exist?("#{ENV['HOME']}/.sheepsafe/sheepsafe.proxy.pid") && File.read("#{ENV['HOME']}/.sheepsafe/sheepsafe.proxy.pid").to_i > 0
     end
 
     def notify_ok(msg)
