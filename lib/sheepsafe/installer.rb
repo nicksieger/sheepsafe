@@ -5,6 +5,7 @@ module Sheepsafe
     attr_reader :config, :network, :controller
 
     def initialize(config = nil, network = nil, controller = nil)
+      check_config_path
       require 'highline/import'
       @config  = config  || (File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({}))
       @network = network || Sheepsafe::Network.new(@config)
@@ -20,6 +21,12 @@ module Sheepsafe
       write_launchd_plist
       register_launchd_task
       announce_done
+    end
+
+    def check_config_path
+      if !File.directory? "#{ENV['HOME']}/.sheepsafe/"
+        Dir.mkdir("#{ENV['HOME']}/.sheepsafe/")
+      end
     end
 
     def intro_message
