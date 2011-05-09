@@ -5,6 +5,7 @@ module Sheepsafe
     attr_reader :config, :network, :controller
 
     def initialize(config = nil, network = nil, controller = nil)
+      check_config_path
       require 'highline/import'
       @config  = config  || (File.readable?(Sheepsafe::Config::FILE) ? Sheepsafe::Config.new : Sheepsafe::Config.new({}))
       @network = network || Sheepsafe::Network.new(@config)
@@ -13,6 +14,7 @@ module Sheepsafe
     end
 
     def install
+      migrate_old_config_path
       intro_message
       config_prompts
       setup_network_location
@@ -20,6 +22,27 @@ module Sheepsafe
       write_launchd_plist
       register_launchd_task
       announce_done
+    end
+
+    def check_config_path
+      if !File.directory? "#{ENV['HOME']}/.sheepsafe/"
+        Dir.mkdir("#{ENV['HOME']}/.sheepsafe/")
+      end
+    end
+
+    def migrate_old_config_path
+      reinitialize = false
+      if File.exist?("#{ENV['HOME']}/.sheepsafe.log")
+        reinitialize = true
+        say "Moving old sheepsafe.log file to new directory."
+        system "mv ~/.sheepsafe.log ~/.sheepsafe/sheepsafe.log"
+      end
+      if File.exist?("#{ENV['HOME']}/.sheepsafe.yml")
+        reinitialize = true
+        say "Moving old sheepsafe.yml file to new directory."
+        system "mv ~/.sheepsafe.yml ~/.sheepsafe/sheepsafe.yml"
+      end
+      initialize if reinitialize
     end
 
     def intro_message
@@ -133,7 +156,7 @@ PLIST
         system "launchctl unload #{PLIST_FILE}"
         File.unlink PLIST_FILE rescue nil
       end
-      Dir['~/.sheepsafe.*'].each {|f| File.unlink f rescue nil}
+      system "rm -r ~/.sheepsafe"
       say "Uninstall finished."
     end
 
