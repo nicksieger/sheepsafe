@@ -144,9 +144,9 @@ PLIST
     end
 
     def add
-      @config.trusted_names << @network.ssid	
+      @config.trusted_names << @network.ssid
       @config.last_network = nil
-      say "Adding #{config.trusted_names[num]} to your trusted locations"
+      say "Adding #{@network.ssid} to your trusted locations"
       write_config
       @controller.run
     end
