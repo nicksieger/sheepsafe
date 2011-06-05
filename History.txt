@@ -1,3 +1,8 @@
+=== 0.3.2
+
+- Migrate all sheepsafe files to ~/.sheepsafe/ directory (Justin Ridgewell)
+- Change internet connection check to look for google.com 'gws' server
+
 === 0.3.1
 
 - Fix `sheepsafe add` (thanks Justin Ridgewell for pointing out)

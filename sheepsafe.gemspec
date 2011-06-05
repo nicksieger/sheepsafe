@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name              = 'sheepsafe'
-  s.version           = '0.3.1'
-  s.date              = '2011-05-09'
+  s.version           = '0.3.2'
+  s.date              = '2011-06-05'
 
   s.rubyforge_project = %q{caldersphere}
 
@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
   s.executables = ["sheepsafe"]
-  s.default_executable = "sheepsafe"
 
   s.post_install_message = %[
 ===========================================================================
