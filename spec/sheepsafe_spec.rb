@@ -179,7 +179,7 @@ describe Sheepsafe::Installer do
   let(:config) { double("config").as_null_object }
   let(:network) { double("network", :up? => true, :ssid => "current", :bssid => "current_bssid") }
   let(:controller) { double "controller" }
-  let (:installer) do
+  let(:installer) do
     @messages = []
     @commands = []
     Sheepsafe::Installer.new(config, network, controller).tap do |ins|
