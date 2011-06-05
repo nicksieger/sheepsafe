@@ -51,8 +51,8 @@ module Sheepsafe
             notified = false
             loop do
               require 'open-uri'
-              is_example_com = open("http://example.com") {|f| f.read[/(RFC 2606)/] == "RFC 2606"} rescue nil
-              break if is_example_com
+              is_google_com = open("http://www.google.com") {|f| f.meta['server'] == 'gws'} rescue nil
+              break if is_google_com
               notify_warning("Waiting for internet connection before switching") unless notified
               notified = true
               sleep 5
