@@ -203,6 +203,7 @@ describe Sheepsafe::Installer do
 
   before :each do
     $?.stub :success? => true
+    File.stub!(:exist?).and_return false
   end
 
   it "asks questions, runs commands, writes the config to disk and runs the controller" do
