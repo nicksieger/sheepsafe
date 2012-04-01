@@ -35,13 +35,21 @@ module Sheepsafe
     def run
       log("Sheepsafe starting")
 
-      if ARGV.first == 'proxy'  # 'sheepsafe proxy up/down/kick'
+      case ARGV.first
+      when 'proxy'  # 'sheepsafe proxy up/down/kick'
         bring_socks_proxy ARGV[1]
+        return
+      when 'enable', 'disable'
+        @config.disabled = (ARGV.first == 'disable')
+        @config.write
         return
       end
 
       # Always recycle the proxy server on network changes
       bring_socks_proxy 'down'
+
+      return if @config.disabled
+
       if network_up?
         if network_changed?
           if switch_to_trusted?

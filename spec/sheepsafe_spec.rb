@@ -4,7 +4,7 @@ require 'sheepsafe'
 describe Sheepsafe::Controller do
   let(:config) do
     double("config", :trusted_location => "trusted_location", :untrusted_location => "untrusted_location",
-         :last_network= => nil, :write => nil)
+         :last_network= => nil, :write => nil, :disabled => nil)
   end
 
   let (:network) do
@@ -67,6 +67,15 @@ describe Sheepsafe::Controller do
   context "network is down" do
     it "does nothing" do
       network.should_receive(:up?).and_return false
+      config.should_not_receive(:write)
+      controller.run
+    end
+  end
+
+  context "disabled in config" do
+    it "does nothing" do
+      config.stub :disabled => true
+      controller.should_receive(:bring_socks_proxy).with('down')
       config.should_not_receive(:write)
       controller.run
     end
