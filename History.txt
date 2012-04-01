@@ -1,3 +1,8 @@
+=== 0.3.3
+
+- Detect "AirPort" or "Wi-Fi" network service name in installer
+- Allow disabling sheepsafe with command-line "sheepsafe <enable|disable>"
+
 === 0.3.2
 
 - Migrate all sheepsafe files to ~/.sheepsafe/ directory (Justin Ridgewell)

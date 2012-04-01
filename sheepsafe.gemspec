@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name              = 'sheepsafe'
-  s.version           = '0.3.2'
-  s.date              = '2011-06-05'
+  s.version           = '0.3.3'
+  s.date              = '2012-04-01'
 
   s.rubyforge_project = %q{caldersphere}
 
@@ -35,6 +35,8 @@ current configuration, run \`sheepsafe update\'.
 
   # = MANIFEST =
   s.files = %w[
+    Gemfile
+    Gemfile.lock
     History.txt
     LICENSE
     README.md

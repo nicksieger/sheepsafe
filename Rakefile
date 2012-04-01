@@ -21,7 +21,7 @@ def date
 end
 
 def rubyforge_project
-  "jruby-extras"
+  "caldersphere"
 end
 
 def gemspec_file
