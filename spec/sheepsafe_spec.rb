@@ -53,14 +53,14 @@ describe Sheepsafe::Controller do
     it "does not touch config" do
       network.stub :trustworthy? => true
       config.should_not_receive(:write)
-      controller.run
+      controller.run([])
     end
 
     it "recycles the proxy server process when on the untrusted network" do
       network.stub :trustworthy? => false
       controller.should_receive(:bring_socks_proxy).with('down')
       controller.should_receive(:bring_socks_proxy).with('up')
-      controller.run
+      controller.run([])
     end
   end
 
@@ -68,7 +68,7 @@ describe Sheepsafe::Controller do
     it "does nothing" do
       network.should_receive(:up?).and_return false
       config.should_not_receive(:write)
-      controller.run
+      controller.run([])
     end
   end
 
@@ -77,7 +77,7 @@ describe Sheepsafe::Controller do
       config.stub :disabled => true
       controller.should_receive(:bring_socks_proxy).with('down')
       config.should_not_receive(:write)
-      controller.run
+      controller.run([])
     end
   end
 
@@ -90,7 +90,7 @@ describe Sheepsafe::Controller do
     it "writes the last network to the configuration" do
       config.should_receive(:last_network=).ordered
       config.should_receive(:write).ordered
-      controller.run
+      controller.run([])
     end
 
     context "to trusted" do
@@ -98,7 +98,7 @@ describe Sheepsafe::Controller do
         controller.should_receive(:switch_to_trusted?).and_return true
         controller.should_receive(:system).with("scselect trusted_location")
         controller.should_receive(:bring_socks_proxy).with('down')
-        controller.run
+        controller.run([])
       end
     end
 
@@ -109,8 +109,26 @@ describe Sheepsafe::Controller do
         controller.should_receive(:system).with("scselect untrusted_location")
         controller.should_receive(:bring_socks_proxy).with('down')
         controller.should_receive(:bring_socks_proxy).with('up')
-        controller.run
+        controller.run([])
       end
+    end
+  end
+
+  context "sheepsafe proxy down" do
+    it "brings the proxy down and then exits" do
+      controller.should_receive(:bring_socks_proxy).with('down')
+      config.should_not_receive(:write)
+      controller.run(["proxy", "down"])
+    end
+  end
+
+  context "sheepsafe disable" do
+    it "writes disabled:true to the config" do
+      config.should_receive(:disabled=).with(true)
+      config.should_receive(:write)
+      controller.should_receive(:bring_socks_proxy).with('down')
+      controller.should_receive(:system).with("scselect trusted_location")
+      controller.run(["disable"])
     end
   end
 end

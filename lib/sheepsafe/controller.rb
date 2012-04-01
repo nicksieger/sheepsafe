@@ -32,17 +32,26 @@ module Sheepsafe
       $stdout  = TeeStdout.new(self)
     end
 
-    def run
+    def run(args = ARGV)
       log("Sheepsafe starting")
 
-      case ARGV.first
+      case args.first
       when 'proxy'  # 'sheepsafe proxy up/down/kick'
-        bring_socks_proxy ARGV[1]
+        bring_socks_proxy args[1]
         return
-      when 'enable', 'disable'
-        @config.disabled = (ARGV.first == 'disable')
+      when 'disable'
+        @config.disabled = true
         @config.write
+        bring_socks_proxy 'down'
+        system "scselect #{@config.trusted_location}"
         return
+      when 'enable'
+        @config.disabled = nil
+        @config.write
+      when nil
+        true # continue
+      else
+        abort "unknown command #{args.first}. Try 'install', 'update', or 'uninstall'."
       end
 
       # Always recycle the proxy server on network changes

@@ -8,15 +8,11 @@ rescue LoadError
   require 'sheepsafe'
 end
 
-if ARGV.length == 1
+if ARGV.length > 0 && Sheepsafe::Installer.instance_methods(false).map(&:to_s).include?(ARGV[0])
   installer = Sheepsafe::Installer.new
-  if installer.respond_to?(ARGV.first)
-    installer.send(ARGV.first)
-  else
-    abort "unknown command #{ARGV.first}. Try 'install', 'update', or 'uninstall'."
-  end
+  installer.send(ARGV.first)
 else
   # Allow network changes to sink in for a couple more seconds
-  sleep 2
+  sleep 2 if ARGV.length == 0
   Sheepsafe::Controller.new.run
 end
