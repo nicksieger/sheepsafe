@@ -92,8 +92,8 @@ MSG
 
       if agree "Next, I'll set up the SOCKS proxy in the \"Untrusted\" location for you. OK\? (yes/no)\n"
         system "networksetup -switchtolocation Untrusted"
-        wifi_service = `networksetup -listallnetworkservices`.lines.detect {|l| l[/(AirPort|Wi-Fi)/, 1] }
-        system "networksetup -setsocksfirewallproxy wifi_service localhost #{config.socks_port}"
+        wifi_service = `networksetup -listallnetworkservices`.lines.detect {|l| l[/(AirPort|Wi-Fi)/, 1] }.gsub(/\n/,'')
+        system "networksetup -setsocksfirewallproxy \"#{wifi_service}\" localhost #{config.socks_port}"
       end
     end
 
