@@ -1,5 +1,5 @@
 require 'yaml'
-
+require 'highline/import'
 module Sheepsafe
   class Config
     FILE = File.expand_path('~/.sheepsafe/sheepsafe.yml')
